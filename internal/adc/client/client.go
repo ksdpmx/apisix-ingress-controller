@@ -31,6 +31,7 @@ import (
 
 	adctypes "github.com/apache/apisix-ingress-controller/api/adc"
 	"github.com/apache/apisix-ingress-controller/internal/adc/cache"
+	"github.com/apache/apisix-ingress-controller/internal/controller/label"
 	"github.com/apache/apisix-ingress-controller/internal/provider/common"
 	"github.com/apache/apisix-ingress-controller/internal/types"
 	pkgmetrics "github.com/apache/apisix-ingress-controller/pkg/metrics"
@@ -202,6 +203,10 @@ func (c *Client) Sync(ctx context.Context) (map[string]types.ADCExecutionErrors,
 
 		if err := c.sync(ctx, Task{
 			Name: name + "-sync",
+			Labels: map[string]string{
+				// temp
+				label.LabelSk8sManagedBy: os.Getenv("MANAGED_BY"),
+			},
 			Configs: map[types.NamespacedNameKind]adctypes.Config{
 				{}: config,
 			},
