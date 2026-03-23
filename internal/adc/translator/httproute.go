@@ -591,6 +591,10 @@ func (t *Translator) TranslateHTTPRoute(tctx *provider.TranslateContext, httpRou
 			upstreamName := adctypes.ComposeUpstreamNameForBackendRef(kind, namespace, name, port)
 			upstream.Name = upstreamName
 			upstream.ID = id.GenID(upstreamName)
+			if value, ok := labels[label.LabelSk8sManagedBy]; ok && value != "" {
+				upstream.Metadata.Labels[label.LabelSk8sManagedBy] = value
+			}
+
 			upstreams = append(upstreams, upstream)
 		}
 

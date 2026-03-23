@@ -30,7 +30,9 @@ const (
 	LabelName           = "k8s/name"
 	LabelNamespace      = "k8s/namespace"
 	LabelControllerName = "k8s/controller-name"
-	LabelManagedBy      = "manager-by"
+	// TODO reuse this one
+	LabelManagedBy     = "manager-by"
+	LabelSk8sManagedBy = "sk8s.lexisnexis.dev/managed-by"
 )
 
 func GenLabel(client client.Object, args ...string) Label {
@@ -39,7 +41,11 @@ func GenLabel(client client.Object, args ...string) Label {
 	label[LabelNamespace] = client.GetNamespace()
 	label[LabelName] = client.GetName()
 	label[LabelControllerName] = config.ControllerConfig.ControllerName
+	// TODO reuse this one
 	label[LabelManagedBy] = "apisix-ingress-controller"
+	if sk8sManagedBy, ok := client.GetLabels()[LabelSk8sManagedBy]; ok && sk8sManagedBy != "" {
+		label[LabelSk8sManagedBy] = sk8sManagedBy
+	}
 	for i := 0; i < len(args); i += 2 {
 		label[args[i]] = args[i+1]
 	}
