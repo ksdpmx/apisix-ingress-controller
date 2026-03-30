@@ -155,6 +155,7 @@ func (t *Translator) fillPluginsFromGatewayProxy(plugins adctypes.GlobalRule, ga
 				continue
 			}
 		}
+		pluginConfig["labels"] = label.GenLabel(gatewayProxy)
 		plugins[pluginName] = pluginConfig
 	}
 	t.Log.V(1).Info("fill plugins for gateway proxy", "plugins", plugins)
